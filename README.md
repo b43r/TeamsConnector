@@ -3,7 +3,7 @@ A simple package for interfacing with Microsoft Teams, written in C# and .NET 6.
 
 Main features:
 - Get presence of current user
-- Get notified about presence changed
+- Get notified about presence changes
 - Get notified about incoming calls, including the calling phone number
 - Make outgoing calls
 
