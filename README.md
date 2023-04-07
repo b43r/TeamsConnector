@@ -18,3 +18,17 @@ Create a new instance of TeamsClient and get presence of the current user:
 var teamsClient = new TeamsClient();
 string presence = teamsClient.GetAvailability() + "/" + teamsClient.GetActivity();
 ```
+
+Get notified about presence changes:
+
+```csharp
+teamsClient.PresenceChanged += TeamsClient_OnPresenceChanged;
+teamsClient.CreatePresenceSubscription();
+```
+
+```csharp
+private void TeamsClient_OnPresenceChanged(object? sender, PresenceChangedEventArgs e)
+{
+  Console.WriteLine($"Presence changed: {e.Availability}/{e.Activity}");
+}
+```
