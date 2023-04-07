@@ -57,3 +57,5 @@ teamsClient.MakeCall("+41441112233");
 The constructor of the TeamsClient class throws a ```TeamsConnectorException``` exception if:
 - Microsoft Teams ist not registered as the default IM application
 - MIcrosoft Teams is not started
+
+If your program ends or you no longer need your instance of the ```TeamsClient``` class, you should remove all event handlers and call the ```Dispose()``` method.
