@@ -24,7 +24,6 @@
  * SOFTWARE.
  */
 
-using System;
 using System.Runtime.InteropServices;
 
 using Microsoft.Office.Uc;
