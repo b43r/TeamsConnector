@@ -54,6 +54,6 @@ teamsClient.MakeCall("+41441112233");
 
 ## Error handling
 
-The constructor of the TeamsClient class throws an exception if:
+The constructor of the TeamsClient class throws a ```TeamsConnectorException``` exception if:
 - Microsoft Teams ist not registered as the default IM application
 - MIcrosoft Teams is not started
