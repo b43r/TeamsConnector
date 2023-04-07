@@ -58,4 +58,10 @@ The constructor of the TeamsClient class throws a ```TeamsConnectorException``` 
 - Microsoft Teams ist not registered as the default IM application
 - MIcrosoft Teams is not started
 
-If your program ends or you no longer need your instance of the ```TeamsClient``` class, you should remove all event handlers and call the ```Dispose()``` method.
+If your program ends or you no longer need your instance of the ```TeamsClient``` class, you should remove all event handlers and call the ```Dispose()``` method:
+
+```csharp
+teamsClient.PresenceChanged -= TeamsClient_PresenceChanged;
+teamsClient.IncomingCall -= TeamsClient_IncomingCall;
+teamsClient.Dispose();
+```
