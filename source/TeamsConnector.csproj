@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -6,7 +6,21 @@
     <Nullable>enable</Nullable>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>TeamsConnector</Title>
+    <Authors>b43r</Authors>
+    <Description>A simple package for interfacing with Microsoft Teams, written in C# and .NET 6.0.</Description>
+    <Copyright>(c) 2023 by Simon Baer</Copyright>
+    <PackageProjectUrl>https://github.com/b43r/TeamsConnector</PackageProjectUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/b43r/TeamsConnector/tree/main/source</RepositoryUrl>
+    <AssemblyVersion>1.0.3.0</AssemblyVersion>
+    <FileVersion>$(AssemblyVersion)</FileVersion>
+    <Version>$(AssemblyVersion)</Version>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\README.md" Pack="true" PackagePath="\"/>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Interop.UIAutomationClient" Version="10.19041.0" />
@@ -16,6 +30,13 @@
     <Reference Include="Microsoft.Office.Uc">
       <HintPath>lib\Microsoft.Office.Uc.dll</HintPath>
     </Reference>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Content Include="lib\Microsoft.Office.Uc.dll">
+        <Pack>true</Pack>
+        <PackagePath>lib\$(TargetFramework)</PackagePath>
+    </Content>
   </ItemGroup>
 
 </Project>
