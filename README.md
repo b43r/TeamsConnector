@@ -45,3 +45,11 @@ private void TeamsClient_IncomingCall(object? sender, IncomingCallEventArgs e)
     Console.WriteLine($"Incoming call from: {e.PhoneNumber}");
 }
 ```
+
+Start an outgoing call:
+
+```csharp
+teamsClient.MakeCall("+41441112233");
+```
+
+## Error handling
