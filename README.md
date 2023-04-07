@@ -10,7 +10,7 @@ Main features:
 Works with both the old and **new (beta)** Teams client!
 
 
-# Getting started
+## Getting started
 
 Create a new instance of TeamsClient and get presence of the current user:
 
@@ -53,3 +53,7 @@ teamsClient.MakeCall("+41441112233");
 ```
 
 ## Error handling
+
+The constructor of the TeamsClient class throws an exception if:
+- Microsoft Teams ist not registered as the default IM application
+- MIcrosoft Teams is not started
