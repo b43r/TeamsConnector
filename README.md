@@ -12,8 +12,9 @@ Works with both the old and **new (beta)** Teams client!
 
 # Getting started
 
-Create a new instance of TeamsClient:
+Create a new instance of TeamsClient and get presence of the current user:
 
-```
-teamsClient = new TeamsClient();
+```csharp
+var teamsClient = new TeamsClient();
+string presence = teamsClient.GetAvailability() + "/" + teamsClient.GetActivity();
 ```
