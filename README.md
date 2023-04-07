@@ -22,13 +22,26 @@ string presence = teamsClient.GetAvailability() + "/" + teamsClient.GetActivity(
 Get notified about presence changes:
 
 ```csharp
-teamsClient.PresenceChanged += TeamsClient_OnPresenceChanged;
+teamsClient.PresenceChanged += TeamsClient_PresenceChanged;
 teamsClient.CreatePresenceSubscription();
 ```
 
 ```csharp
-private void TeamsClient_OnPresenceChanged(object? sender, PresenceChangedEventArgs e)
+private void TeamsClient_PresenceChanged(object? sender, PresenceChangedEventArgs e)
 {
-  Console.WriteLine($"Presence changed: {e.Availability}/{e.Activity}");
+    Console.WriteLine($"Presence changed: {e.Availability}/{e.Activity}");
+}
+```
+
+Get notified about incoming calls:
+
+```csharp
+teamsClient.IncomingCall += TeamsClient_IncomingCall;
+```
+
+```csharp
+private void TeamsClient_IncomingCall(object? sender, IncomingCallEventArgs e)
+{
+    Console.WriteLine($"Incoming call from: {e.PhoneNumber}");
 }
 ```
