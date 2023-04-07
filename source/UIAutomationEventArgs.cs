@@ -24,8 +24,6 @@
  * SOFTWARE.
  */
 
-using System;
-
 namespace TeamsConnector
 {
     public class UIAutomationEventArgs : EventArgs
