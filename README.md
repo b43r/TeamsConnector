@@ -65,3 +65,8 @@ teamsClient.PresenceChanged -= TeamsClient_PresenceChanged;
 teamsClient.IncomingCall -= TeamsClient_IncomingCall;
 teamsClient.Dispose();
 ```
+
+## How it works
+
+TeamsConnector does **not** make use of the Graph API, instead it uses UI Automation to interact with the Microsoft Teams window and Office UC API to get presence information.
+
