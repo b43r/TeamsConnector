@@ -9,6 +9,17 @@ Main features:
 
 Works with both the old and **new (beta)** Teams client!
 
+## Install the package
+
+Visual Studio Package Manager Console:
+```
+Install-Package TeamsConnector
+```
+
+.NET CLI:
+```
+dotnet add package TeamsConnector 
+```
 
 ## Getting started
 
