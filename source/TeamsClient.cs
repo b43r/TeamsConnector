@@ -29,6 +29,8 @@ using System.Runtime.InteropServices;
 using Microsoft.Office.Uc;
 using Microsoft.Win32;
 
+using TeamsConnector.Automation;
+
 namespace TeamsConnector
 {
     public class TeamsClient : IDisposable
@@ -53,7 +55,7 @@ namespace TeamsConnector
 
         private TeamsClientVersion clientVersion;
 
-        private Automation automation;
+        private Automation.Automation automation;
 
         /// <summary>
         /// Create a new instance of the TeamsConnector client.
@@ -63,7 +65,9 @@ namespace TeamsConnector
         {
             try
             {
+#pragma warning disable CA1416 // Validate platform compatibility
                 string? clientName = Registry.GetValue("HKEY_CURRENT_USER\\Software\\IM Providers", "DefaultIMApp", null) as string;
+#pragma warning restore CA1416 // Validate platform compatibility
                 switch (clientName)
                 {
                     case ClientVersionLegacy:
@@ -83,7 +87,9 @@ namespace TeamsConnector
                     throw new TeamsConnectorException("Teams is not the default IM client.");
                 }
 
+#pragma warning disable CA1416 // Validate platform compatibility
                 int upAndRunning = (int)(Registry.GetValue($"HKEY_CURRENT_USER\\Software\\IM Providers\\{clientName}", "UpAndRunning", 0) ?? 0);
+#pragma warning restore CA1416 // Validate platform compatibility
                 if (upAndRunning != Running)
                 {
                     Logger.Log("Teams is not running.");
@@ -118,7 +124,7 @@ namespace TeamsConnector
                 selfContact = ucClient.ContactManager.GetContactByUri(selfUri);
                 modalityAudioVideoAvailable = selfContact.CanStart(ModalityTypes.ucModalityAudioVideo);
 
-                automation = new Automation();
+                automation = new Automation.Automation();
             }
             catch (COMException ex)
             {
@@ -263,6 +269,70 @@ namespace TeamsConnector
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// Set the availability of the local Teams client to the given value.
+        /// </summary>
+        /// <param name="availability">Availability</param>
+        /// <returns>true if successful</returns>
+        public bool SetAvailability(Availability availability)
+        {
+            if (_disposed)
+            {
+                throw new ObjectDisposedException(nameof(TeamsClient));
+            }
+
+            if (clientVersion == TeamsClientVersion.New2023)
+            {
+                var mainWin = automation.GetWindowByTitle(".*Microsoft Teams");
+                if (mainWin == null)
+                {
+                    Logger.Log("No Teams window found!");
+                    return false;
+                }
+                Logger.Log($"Main window: hwnd={mainWin.CurrentNativeWindowHandle}, Name={mainWin.CurrentName} Class={mainWin.CurrentClassName} Type={mainWin.CurrentControlType}");
+
+                var profilButton = mainWin.FindFirst(ControlType.Button, null, "Ihr Profilbild");
+                profilButton?.Expand();
+
+                var profilMenu = mainWin.FindFirst(ControlType.Window, null, "Profilmenü", 500);
+                if (profilMenu != null)
+                {
+                    var status = profilMenu.FindFirst(ControlType.MenuItem, "fui-MenuItem", null, 500);
+                    status?.Expand();
+                }
+
+                var statusMenu = mainWin.FindFirst(ControlType.Menu, null, "Status ändern", 500);
+                if (statusMenu != null)
+                {
+                    var newStatusItem = statusMenu.FindFirst(ControlType.RadioButton, null, "presenceText", 500);
+                    if (newStatusItem == null || !newStatusItem.Invoke())
+                    {
+                        Logger.Log("Invoke on new status failed!");
+                        return false;
+                    }
+                }
+                else
+                {
+                    Logger.Log("Menu element to change status not found!");
+                    return false;
+                }
+
+                // collapse profile menu
+                if (profilButton == null)
+                {
+                    profilButton = mainWin.FindFirst(ControlType.Button, null, "Ihr Profilbild");
+                }
+                profilButton?.Collapse();
+
+                return true;
+            }
+            else
+            {
+                Logger.Log("'SetAvailability' is only available with the new (2023) Teams client!");
+                return false;
+            }
         }
 
         /// <summary>

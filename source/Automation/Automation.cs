@@ -24,14 +24,27 @@
  * SOFTWARE.
  */
 
+using System.Runtime.InteropServices;
+using System.Text;
 using System.Text.RegularExpressions;
 
 using Interop.UIAutomationClient;
 
-namespace TeamsConnector
+namespace TeamsConnector.Automation
 {
     internal class Automation
     {
+        private delegate bool EnumWindowsProc(IntPtr hWnd, int lParam);
+
+        [DllImport("user32.dll")]
+        private static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
+
+        [DllImport("user32.dll")]
+        private static extern bool EnumWindows(EnumWindowsProc enumFunc, int lParam);
+
+        [DllImport("user32.dll")]
+        private static extern int GetWindowTextLength(IntPtr hWnd);
+
         /// <summary>
         /// Event that is raised on incoming calls.
         /// </summary>
@@ -117,7 +130,7 @@ namespace TeamsConnector
 
                     if (retryCount < 10)
                     {
-                        Logger.Log($"Delay: {((10 - retryCount) * 100)} ms.");
+                        Logger.Log($"Delay: {(10 - retryCount) * 100} ms.");
                     }
 
                     if (!string.IsNullOrEmpty(phoneNumberFromNotifyWindow))
@@ -161,6 +174,54 @@ namespace TeamsConnector
                 Logger.Log($"ExtractPhoneNumber exception: {arg}");
                 return text;
             }
+        }
+
+        /// <summary>
+        /// Returns the UIAutomationElement of the window with the given title.
+        /// </summary>
+        /// <param name="titleRegex">regular expression that matches the window title</param>
+        /// <returns>IUIAutomationElement or null</returns>
+        public IUIAutomationElement? GetWindowByTitle(string titleRegex)
+        {
+            var hwnd = GetWindowHandle(titleRegex);
+            if (hwnd != IntPtr.Zero)
+            {
+                return automation.ElementFromHandle(hwnd);
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Returns the window handle of the window with the given title.
+        /// </summary>
+        /// <param name="titleRegex">regular expression that matches the window title</param>
+        /// <returns>window handle or IntPtr.Zero</returns>
+        private static IntPtr GetWindowHandle(string titleRegex)
+        {
+            var re = new Regex(titleRegex);
+
+            IntPtr result = IntPtr.Zero;
+            EnumWindows(delegate (IntPtr hWnd, int lParam)
+            {
+                int windowTextLength = GetWindowTextLength(hWnd);
+                if (windowTextLength == 0)
+                {
+                    return true;
+                }
+
+                StringBuilder text = new StringBuilder(windowTextLength);
+                GetWindowText(hWnd, text, windowTextLength + 1);
+                if (re.IsMatch(text.ToString()))
+                {
+                    result = hWnd;
+                    return false;
+                }
+
+                return true;
+            }, 0);
+
+            return result;
         }
     }
 }

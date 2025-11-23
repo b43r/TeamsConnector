@@ -1,5 +1,5 @@
 # About TeamsConnector
-A simple package for interfacing with Microsoft Teams, written in C# and .NET 6.0.
+A simple package for interfacing with Microsoft Teams, written in C# and .NET 10.0.
 
 Main features:
 - Get presence of current user

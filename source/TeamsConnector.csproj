@@ -1,25 +1,25 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>TeamsConnector</Title>
     <Authors>b43r</Authors>
-    <Description>A simple package for interfacing with Microsoft Teams, written in C# and .NET 6.0.</Description>
-    <Copyright>(c) 2023 by Simon Baer</Copyright>
+    <Description>A simple package for interfacing with Microsoft Teams, written in C# and .NET 10.0.</Description>
+    <Copyright>(c) 2025 by Simon Baer</Copyright>
     <PackageProjectUrl>https://github.com/b43r/TeamsConnector</PackageProjectUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/b43r/TeamsConnector/tree/main/source</RepositoryUrl>
-    <AssemblyVersion>1.0.3.0</AssemblyVersion>
+    <AssemblyVersion>1.0.4.0</AssemblyVersion>
     <FileVersion>$(AssemblyVersion)</FileVersion>
     <Version>$(AssemblyVersion)</Version>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\README.md" Pack="true" PackagePath="\"/>
+    <None Include="..\README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 
   <ItemGroup>
